@@ -1,0 +1,25 @@
+{
+  "name": "jsai-build-a-thon",
+  "version": "1.0.0",
+  "description": "jsai-build-a-thon",
+  "main": "index.js",
+  "scripts": {
+    "test": "sample.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hwolf441/JSAI-Build-a-thon.git"
+  },
+  "author": "Stephen Tharua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hwolf441/JSAI-Build-a-thon/issues"
+  },
+  "homepage": "https://github.com/hwolf441/JSAI-Build-a-thon#readme",
+  "type": "module",
+  "dependencies": {
+    "@azure-rest/ai-inference": "latest",
+    "@azure/core-auth": "latest",
+    "@azure/core-sse": "latest"
+  }
+}
