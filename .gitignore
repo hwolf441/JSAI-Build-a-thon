@@ -58,8 +58,7 @@ dlldata.c
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
-# .NET Core
-project.lock.json
+# .NET Core project.lock.json
 project.fragment.lock.json
 artifacts/
 
@@ -287,7 +286,7 @@ FakesAssemblies/
 
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
-node_modules/
+# node_modules/
 
 # Visual Studio 6 build log
 *.plg
