@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { AzureChatOpenAI } from "@langchain/openai";
 import { BufferMemory } from "langchain/memory";
 import { ChatMessageHistory } from "langchain/stores/message/in_memory";
+import { AgentService } from "./agentService.js";
 // Made some changes to implement RAG with PDF
 // add at the top of the file -----------------------------------------
 // JSAI-Build-a-thon/packages/webapi/server.js
@@ -37,14 +38,14 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../..');
-const pdfPath = path.join(projectRoot, 'JSAI-Build-a-thon/data/employee_handbook.pdf'); // Update with your PDF file name
+const pdfPath = path.join(projectRoot, 'data/employee_handbook.pdf'); // Update with your PDF file name
 // --------------------------------------------------------------------
 
 const chatModel = new AzureChatOpenAI({
   azureOpenAIApiKey: process.env.AI_INFERENCE_SDK_KEY,
   azureOpenAIApiInstanceName: process.env.INSTANCE_NAME, // In target url: https://<INSTANCE_NAME>.services...
   azureOpenAIApiDeploymentName: process.env.DEPLOYMENT_NAME, // i.e "gpt-4o"
-  azureOpenAIApiVersion: "2024-05-01-preview", // In target url: ...<VERSION>
+  azureOpenAIApiVersion: "2025-01-01-preview", // In target url: ...<VERSION>
   temperature: 1,
   maxTokens: 4096,
 });
@@ -101,11 +102,21 @@ function retrieveRelevantContent(query) {
 // --------------------------------------------------------------------
 
 // replace the entire app.post handler with the following code --------
+const agentService = new AgentService();
 app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   const useRAG = req.body.useRAG === undefined ? true : req.body.useRAG;
   const sessionId = req.body.sessionId || "default";
+const mode = req.body.mode || "basic";
 
+// If agent mode is selected, route to agent service
+if (mode === "agent") {
+  const agentResponse = await agentService.processMessage(sessionId, userMessage);
+  return res.json({
+    reply: agentResponse.reply,
+    sources: []
+  });
+}
   let sources = [];
 
   const memory = getSessionMemory(sessionId);
