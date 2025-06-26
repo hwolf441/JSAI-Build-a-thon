@@ -1,3 +1,6 @@
+// Using GITHUB_TOKEN for authentication if needed
+const token = process.env.GITHUB_TOKEN;
+
 const changes = await git.diff({ staged: true });
 
 defDiff("CODE_CHANGES", changes);
